@@ -20,9 +20,9 @@ namespace TimeTracking
 
         public ClockDisplay(int hour, int minute, int second, bool showSeconds)
         {
-            _hours = new NumberDisplay(24, hour);
-            _minutes = new NumberDisplay(60, minute);
-            _seconds = new NumberDisplay(60, second);
+            _hours = new NumberDisplay(hour, 24);
+            _minutes = new NumberDisplay(minute, 60);
+            _seconds = new NumberDisplay(second, 60);
             _showSeconds = showSeconds;
         }
 

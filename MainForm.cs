@@ -31,6 +31,7 @@ namespace TimeTracking
         // Declare the message label
         private Label _messageLabel;
 
+
         public MainForm()
         {
             InitializeComponent();
