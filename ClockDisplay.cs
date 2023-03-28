@@ -18,6 +18,12 @@ namespace TimeTracking
             _showSeconds = showSeconds;
         }
 
+        public bool ShowSeconds
+        {
+            get { return _showSeconds; }
+            set { _showSeconds = value; }
+        }
+
         public ClockDisplay(int hour, int minute, int second, bool showSeconds)
         {
             _hours = new NumberDisplay(hour, 24);
