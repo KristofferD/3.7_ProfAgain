@@ -7,10 +7,10 @@ namespace TimeTracking
     public partial class MainForm : Form
     {
         // Declare the clock and activity timers
-        private ClockDisplay _clockDisplay;
-        private ClockDisplay _researchClockDisplay;
-        private ClockDisplay _teachingClockDisplay;
-        private ClockDisplay _lunchClockDisplay;
+        private ClockDisplay? _clockDisplay;
+        private ClockDisplay? _researchClockDisplay;
+        private ClockDisplay? _teachingClockDisplay;
+        private ClockDisplay? _lunchClockDisplay;
         private System.Windows.Forms.Timer _researchTimer;
         private System.Windows.Forms.Timer _teachingTimer;
         private System.Windows.Forms.Timer _lunchTimer;
@@ -80,9 +80,9 @@ namespace TimeTracking
             _lunchCounter = 0;
 
             // Set the labels of the ClockDisplay objects
-            _researchClockDisplay.Label = _researchLabel;
-            _teachingClockDisplay.Label = _teachingLabel;
-            _lunchClockDisplay.Label = _lunchLabel;
+            _researchClockDisplay?.Label = _researchLabel;
+            _teachingClockDisplay?.Label = _teachingLabel;
+            _lunchClockDisplay?.Label = _lunchLabel;
 
             // Set the text of the current time label
             _currentTimeLabel.Text = _clockDisplay.GetTime();
@@ -183,10 +183,10 @@ namespace TimeTracking
         private void clockTimer_Tick(object sender, EventArgs e)
         {
             // Update the current time label
-            _currentTimeLabel.Text = _clockDisplay.GetTime();
+            _currentTimeLabel.Text = _clockDisplay?.GetTime();
 
             // Update the clock display
-            _clockDisplay.TimeTick();
+            _clockDisplay?.TimeTick();
 
             // Update the message label if the total time spent on research and teaching exceeds 8 hours
             int researchTimeInSeconds = _researchClockDisplay.GetTotalSeconds();

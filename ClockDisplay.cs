@@ -9,6 +9,7 @@ namespace TimeTracking
         private NumberDisplay _minutes;
         private NumberDisplay _seconds;
         private bool _showSeconds;
+        private Label _label;
 
         public ClockDisplay(bool showSeconds)
         {
@@ -18,11 +19,14 @@ namespace TimeTracking
             _showSeconds = showSeconds;
         }
 
-        public bool ShowSeconds
+        public bool ShowSeconds { get; set; }
+
+        public Label Label
         {
-            get { return _showSeconds; }
-            set { _showSeconds = value; }
+            get { return _label; }
+            set { _label = value; }
         }
+
 
         public ClockDisplay(int hour, int minute, int second, bool showSeconds)
         {
@@ -41,6 +45,21 @@ namespace TimeTracking
                 if (_minutes.Number == 0)
                 {
                     _hours.Increment();
+                }
+            }
+            UpdateLabel();
+        }
+        private void UpdateLabel()
+        {
+            if (_label != null)
+            {
+                if (_showSeconds)
+                {
+                    _label.Text = $"{_hours.GetValue():D2}:{_minutes.GetValue():D2}:{_seconds.GetValue():D2}";
+                }
+                else
+                {
+                    _label.Text = $"{_hours.GetValue():D2}:{_minutes.GetValue():D2}";
                 }
             }
         }
