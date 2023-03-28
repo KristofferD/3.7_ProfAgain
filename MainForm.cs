@@ -11,6 +11,7 @@ namespace TimeTracking
         private ClockDisplay? _researchClockDisplay;
         private ClockDisplay? _teachingClockDisplay;
         private ClockDisplay? _lunchClockDisplay;
+        private System.Windows.Forms.Timer _clockTimer;
         private System.Windows.Forms.Timer _researchTimer;
         private System.Windows.Forms.Timer _teachingTimer;
         private System.Windows.Forms.Timer _lunchTimer;
@@ -45,12 +46,15 @@ namespace TimeTracking
 
             // Initialize the clock and activity timers
             _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, false);
+            _clockTimer = new System.Windows.Forms.Timer();
             _researchTimer = new System.Windows.Forms.Timer();
             _teachingTimer = new System.Windows.Forms.Timer();
             _lunchTimer = new System.Windows.Forms.Timer();
+            _clockTimer.Interval = 1000;
             _researchTimer.Interval = 1000;
             _teachingTimer.Interval = 1000;
             _lunchTimer.Interval = 1000;
+            _clockTimer.Tick += clockTimer_Tick;
             _researchTimer.Tick += researchTimer_Tick;
             _teachingTimer.Tick += teachingTimer_Tick;
             _lunchTimer.Tick += lunchTimer_Tick;
@@ -61,6 +65,18 @@ namespace TimeTracking
             _lunchLabel = new Label();
             _currentTimeLabel = new Label();
             _goHomeLabel = new Label();
+
+            // Initialize the clock display
+            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
+
+            // Set the label control for the clock display
+            _clockDisplay.Label = _currentTimeLabel;
+
+            // Start the timer to update the clock display every second
+            _clockTimer.Start();
+
+            // Set the text of the message label
+            _goHomeLabel.Text = "Åk HEM!!!";
 
             // Initialize the buttons
             _researchButton = new Button();
@@ -80,9 +96,9 @@ namespace TimeTracking
             _lunchCounter = 0;
 
             // Set the labels of the ClockDisplay objects
-            _researchClockDisplay?.Label = _researchLabel;
-            _teachingClockDisplay?.Label = _teachingLabel;
-            _lunchClockDisplay?.Label = _lunchLabel;
+            _researchLabel = _researchClockDisplay?.Label;
+            _teachingLabel = _teachingClockDisplay?.Label;
+            _lunchLabel = _lunchClockDisplay?.Label;
 
             // Set the text of the current time label
             _currentTimeLabel.Text = _clockDisplay.GetTime();
@@ -180,6 +196,7 @@ namespace TimeTracking
         }
 
         // Handle the clockTimer Tick event
+        // Handle the clockTimer Tick event
         private void clockTimer_Tick(object sender, EventArgs e)
         {
             // Update the current time label
@@ -214,7 +231,6 @@ namespace TimeTracking
                 _messageLabel.Visible = false;
             }
         }
-
         // Handle the ResearchTimer Tick event
         private void researchTimer_Tick(object sender, EventArgs e)
         {

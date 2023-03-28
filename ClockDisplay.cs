@@ -70,6 +70,11 @@ namespace TimeTracking
             _minutes.Number = minute;
             _seconds.Number = second;
         }
+        public int GetTotalSeconds()
+        {
+            return _hours.GetValue() * 3600 + _minutes.GetValue() * 60 + _seconds.GetValue();
+        }
+
 
         public string GetTime()
         {

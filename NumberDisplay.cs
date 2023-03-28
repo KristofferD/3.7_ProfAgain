@@ -19,6 +19,10 @@ namespace TimeTracking
             _number = number;
             _maxNumber = maxNumber;
         }
+        public int GetValue()
+        {
+            return _number;
+        }
 
         public int Number
         {
