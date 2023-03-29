@@ -7,14 +7,14 @@ namespace TimeTracking
     public partial class MainForm : Form
     {
         // Declare the clock and activity timers
-        private ClockDisplay? _clockDisplay;
-        private ClockDisplay? _researchClockDisplay;
-        private ClockDisplay? _teachingClockDisplay;
-        private ClockDisplay? _lunchClockDisplay;
-        private System.Windows.Forms.Timer _clockTimer;
-        private System.Windows.Forms.Timer _researchTimer;
-        private System.Windows.Forms.Timer _teachingTimer;
-        private System.Windows.Forms.Timer _lunchTimer;
+        private readonly System.Windows.Forms.Timer _clockTimer = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer _researchTimer = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer _teachingTimer = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer _lunchTimer = new System.Windows.Forms.Timer();
+        private TimeSpan _researchTime = TimeSpan.Zero;
+        private TimeSpan _teachingTime = TimeSpan.Zero;
+        private TimeSpan _lunchTime = TimeSpan.Zero;
+        private TimeSpan _currentTime = TimeSpan.Zero;
 
         // Declare the labels
         private Label _researchLabel;
@@ -22,6 +22,12 @@ namespace TimeTracking
         private Label _lunchLabel;
         private Label _currentTimeLabel;
         private Label _goHomeLabel;
+        private Label _clockDisplay;
+        private Label _researchClockDisplay;
+        private Label _teachingClockDisplay;
+        private Label _lunchClockDisplay;
+
+
 
         // Declare the buttons
         private Button _researchButton;
@@ -168,11 +174,11 @@ namespace TimeTracking
             _teachingClockDisplay.Label = _teachingLabel;
             _lunchClockDisplay.Label = _lunchLabel;
 
-            // Initialize the buttons
+           /* // Initialize the buttons
             _researchButton = new Button();
             _teachingButton = new Button();
             _lunchButton = new Button();
-            _saveButton = new Button();
+            _saveButton = new Button();*/
 
             // Create a new CheckBox control
             _showSecondsCheckBox = new CheckBox();
@@ -316,6 +322,66 @@ namespace TimeTracking
         {
             MessageBox.Show("Time to go home!", "Go Home", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void ResearchTimer_Tick(object sender, EventArgs e)
+        {
+            _researchClock--;
+            if (_researchClock == 0)
+            {
+                _researchTimer.Stop();
+                MessageBox.Show("Research time is over!");
+            }
+            else
+            {
+                _researchClockDisplay.Text = _researchClock.ToString();
+            }
+        }
+
+        private void TeachingTimer_Tick(object sender, EventArgs e)
+        {
+            _teachingClock--;
+            if (_teachingClock == 0)
+            {
+                _teachingTimer.Stop();
+                MessageBox.Show("Teaching time is over!");
+            }
+            else
+            {
+                _teachingClockDisplay.Text = _teachingClock.ToString();
+            }
+        }
+
+        private void LunchTimer_Tick(object sender, EventArgs e)
+        {
+            _lunchClock--;
+            if (_lunchClock == 0)
+            {
+                _lunchTimer.Stop();
+                MessageBox.Show("Lunch time is over!");
+            }
+            else
+            {
+                _lunchClockDisplay.Text = _lunchClock.ToString();
+            }
+        }
+
+
+        private void InitializeTimers()
+        {
+            _researchTimer.Interval = 1000; // set the interval to 1 second
+            _researchTimer.Tick += ResearchTimer_Tick;
+
+            _teachingTimer.Interval = 1000; // set the interval to 1 second
+            _teachingTimer.Tick += TeachingTimer_Tick;
+
+            _lunchTimer.Interval = 1000; // set the interval to 1 second
+            _lunchTimer.Tick += LunchTimer_Tick;
+
+            _clockTimer.Interval = 1000; // set the interval to 1 second
+            _clockTimer.Tick += ClockTimer_Tick;
+            _clockTimer.Start(); // start the timer
+        }
+
 
 
         // Handle the ShowSecondsCheckBox CheckedChanged event
