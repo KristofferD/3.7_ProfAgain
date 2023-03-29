@@ -1,6 +1,5 @@
-using System;
+ï»¿using System;
 using System.IO;
-//using System.Reflection.Emit;
 using System.Windows.Forms;
 
 namespace TimeTracking
@@ -8,26 +7,21 @@ namespace TimeTracking
     public partial class MainForm : Form
     {
         // Declare the clock and activity timers
-        private readonly System.Windows.Forms.Timer _clockTimer = new System.Windows.Forms.Timer();
-        private readonly System.Windows.Forms.Timer _researchTimer = new System.Windows.Forms.Timer();
-        private readonly System.Windows.Forms.Timer _teachingTimer = new System.Windows.Forms.Timer();
-        private readonly System.Windows.Forms.Timer _lunchTimer = new System.Windows.Forms.Timer();
-        private TimeSpan _researchTime = TimeSpan.Zero;
-        private TimeSpan _teachingTime = TimeSpan.Zero;
-        private TimeSpan _lunchTime = TimeSpan.Zero;
-        private TimeSpan _currentTime = TimeSpan.Zero;
+        private ClockDisplay? _clockDisplay;
+        private ClockDisplay? _researchClockDisplay;
+        private ClockDisplay? _teachingClockDisplay;
+        private ClockDisplay? _lunchClockDisplay;
+        private System.Windows.Forms.Timer _clockTimer;
+        private System.Windows.Forms.Timer _researchTimer;
+        private System.Windows.Forms.Timer _teachingTimer;
+        private System.Windows.Forms.Timer _lunchTimer;
 
         // Declare the labels
-        private System.Windows.Forms.Label _researchLabel;
-        private System.Windows.Forms.Label _teachingLabel;
-        private System.Windows.Forms.Label _lunchLabel;
-        private System.Windows.Forms.Label _currentTimeLabel;
-        private System.Windows.Forms.Label _goHomeLabel;
-        private System.Windows.Forms.Label _clockDisplay;
-        private System.Windows.Forms.Label _researchClockDisplay;
-        private System.Windows.Forms.Label _teachingClockDisplay;
-        private System.Windows.Forms.Label _lunchClockDisplay;
-
+        private Label _researchLabel;
+        private Label _teachingLabel;
+        private Label _lunchLabel;
+        private Label _currentTimeLabel;
+        private Label _goHomeLabel;
 
         // Declare the buttons
         private Button _researchButton;
@@ -48,18 +42,12 @@ namespace TimeTracking
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Create a new instance of the Label class
-            Label _clockLabel = new Label();
+            // Create a new instance of the ClockDisplay class
+            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
 
             // Set the text of the label control to the current time
-            _clockDisplay.Text = DateTime.Now.ToString("HH:mm:ss");
-            _clockDisplay.AutoSize = true;
-            _clockDisplay.Font = new Font("Arial", 36, FontStyle.Bold);
-
-            // Add the label control to the form's Controls collection
-            Controls.Add(_clockDisplay);
+            _currentTimeLabel.Text = _clockDisplay.GetTime();
         }
-
 
         private void CreateAndStartClockTimer()
         {
@@ -94,6 +82,7 @@ namespace TimeTracking
             this.ClientSize = new Size(400, 300);
 
             // Initialize the clock and activity timers
+            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
             _clockTimer = new System.Windows.Forms.Timer();
             _researchTimer = new System.Windows.Forms.Timer();
             _teachingTimer = new System.Windows.Forms.Timer();
@@ -106,11 +95,9 @@ namespace TimeTracking
             _researchTimer.Tick += researchTimer_Tick;
             _teachingTimer.Tick += teachingTimer_Tick;
             _lunchTimer.Tick += lunchTimer_Tick;
-            _clockDisplay = new Label();
-            _researchClockDisplay = new Label();
-            _teachingClockDisplay = new Label();
-            _lunchClockDisplay = new Label();
-
+            _researchClockDisplay = new ClockDisplay(0, 0, 0, true);
+            _teachingClockDisplay = new ClockDisplay(0, 0, 0, true);
+            _lunchClockDisplay = new ClockDisplay(0, 0, 0, true);
 
             // Set the location of the labels
             _currentTimeLabel.Location = new Point(this.ClientSize.Width / 2 - _currentTimeLabel.Width / 2, 25);
@@ -150,12 +137,12 @@ namespace TimeTracking
             _lunchCounter = 0;
 
             // Set the labels of the ClockDisplay objects
-            _researchLabel = new Label();
-            _teachingLabel = new Label();
-            _lunchLabel = new Label();
+            _researchLabel = _researchClockDisplay?.Label;
+            _teachingLabel = _teachingClockDisplay?.Label;
+            _lunchLabel = _lunchClockDisplay?.Label;
 
             // Set the text of the current time label
-            _currentTimeLabel.Text = _clockDisplay.Label.Text;
+            _currentTimeLabel.Text = _clockDisplay.GetTime();
 
             // Initialize the labels
             _researchLabel = new Label();
@@ -167,9 +154,6 @@ namespace TimeTracking
             // Initialize the clock display
             _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
 
-            // Update the label text with the current time
-            myLabel.Text = _clockDisplay.GetTime();
-
             // Set the label control for the clock display
             _clockDisplay.Label = _currentTimeLabel;
 
@@ -177,18 +161,18 @@ namespace TimeTracking
             _clockTimer.Start();
 
             // Set the text of the message label
-            _goHomeLabel.Text = "Åk HEM!!!";
+            _goHomeLabel.Text = "ï¿½k HEM!!!";
 
             // Set the labels for the activity displays
             _researchClockDisplay.Label = _researchLabel;
             _teachingClockDisplay.Label = _teachingLabel;
             _lunchClockDisplay.Label = _lunchLabel;
 
-           /* // Initialize the buttons
+            // Initialize the buttons
             _researchButton = new Button();
             _teachingButton = new Button();
             _lunchButton = new Button();
-            _saveButton = new Button();*/
+            _saveButton = new Button();
 
             // Create a new CheckBox control
             _showSecondsCheckBox = new CheckBox();
@@ -214,7 +198,7 @@ namespace TimeTracking
             _messageLabel.Size = new System.Drawing.Size(250, 25);
 
             // Set the text of the Label control
-            _messageLabel.Text = "Total tid för forskning och undervisning överstiger 8 timmar!";
+            _messageLabel.Text = "Total tid fï¿½r forskning och undervisning ï¿½verstiger 8 timmar!";
 
             // Set the Font property of the Label control
             _messageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
@@ -243,7 +227,7 @@ namespace TimeTracking
             _currentTimeLabel.Text = _clockDisplay.GetTime();
 
             // Set the text of the message label
-            _goHomeLabel.Text = "Åk HEM!!!";
+            _goHomeLabel.Text = "ï¿½k HEM!!!";
         }
 
         // Handle the ResearchButton Click event
@@ -332,66 +316,6 @@ namespace TimeTracking
         {
             MessageBox.Show("Time to go home!", "Go Home", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-        private void ResearchTimer_Tick(object sender, EventArgs e)
-        {
-            _researchClock--;
-            if (_researchClock == 0)
-            {
-                _researchTimer.Stop();
-                MessageBox.Show("Research time is over!");
-            }
-            else
-            {
-                _researchClockDisplay.Text = _researchClock.ToString();
-            }
-        }
-
-        private void TeachingTimer_Tick(object sender, EventArgs e)
-        {
-            _teachingClock--;
-            if (_teachingClock == 0)
-            {
-                _teachingTimer.Stop();
-                MessageBox.Show("Teaching time is over!");
-            }
-            else
-            {
-                _teachingClockDisplay.Text = _teachingClock.ToString();
-            }
-        }
-
-        private void LunchTimer_Tick(object sender, EventArgs e)
-        {
-            _lunchClock--;
-            if (_lunchClock == 0)
-            {
-                _lunchTimer.Stop();
-                MessageBox.Show("Lunch time is over!");
-            }
-            else
-            {
-                _lunchClockDisplay.Text = _lunchClock.ToString();
-            }
-        }
-
-
-        private void InitializeTimers()
-        {
-            _researchTimer.Interval = 1000; // set the interval to 1 second
-            _researchTimer.Tick += ResearchTimer_Tick;
-
-            _teachingTimer.Interval = 1000; // set the interval to 1 second
-            _teachingTimer.Tick += TeachingTimer_Tick;
-
-            _lunchTimer.Interval = 1000; // set the interval to 1 second
-            _lunchTimer.Tick += LunchTimer_Tick;
-
-            _clockTimer.Interval = 1000; // set the interval to 1 second
-            _clockTimer.Tick += ClockTimer_Tick;
-            _clockTimer.Start(); // start the timer
-        }
-
 
 
         // Handle the ShowSecondsCheckBox CheckedChanged event
