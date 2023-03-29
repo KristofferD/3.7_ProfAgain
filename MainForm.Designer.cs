@@ -27,6 +27,8 @@
             _saveButton = new Button();
             _goHomeLabel = new Label();
             _messageLabel = new Label();
+            _currentTimeLabel = new Label();
+            Controls.Add(_currentTimeLabel);
             SuspendLayout();
             // 
             // MainForm

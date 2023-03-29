@@ -46,7 +46,7 @@ namespace TimeTracking
             _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
 
             // Set the text of the label control to the current time
-            currentTimeLabel.Text = _clockDisplay.GetTime();
+            _currentTimeLabel.Text = _clockDisplay.GetTime();
         }
 
         private void CreateAndStartClockTimer()
