@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+//using System.Reflection.Emit;
 using System.Windows.Forms;
 
 namespace TimeTracking
@@ -17,16 +18,15 @@ namespace TimeTracking
         private TimeSpan _currentTime = TimeSpan.Zero;
 
         // Declare the labels
-        private Label _researchLabel;
-        private Label _teachingLabel;
-        private Label _lunchLabel;
-        private Label _currentTimeLabel;
-        private Label _goHomeLabel;
-        private Label _clockDisplay;
-        private Label _researchClockDisplay;
-        private Label _teachingClockDisplay;
-        private Label _lunchClockDisplay;
-
+        private System.Windows.Forms.Label _researchLabel;
+        private System.Windows.Forms.Label _teachingLabel;
+        private System.Windows.Forms.Label _lunchLabel;
+        private System.Windows.Forms.Label _currentTimeLabel;
+        private System.Windows.Forms.Label _goHomeLabel;
+        private System.Windows.Forms.Label _clockDisplay;
+        private System.Windows.Forms.Label _researchClockDisplay;
+        private System.Windows.Forms.Label _teachingClockDisplay;
+        private System.Windows.Forms.Label _lunchClockDisplay;
 
 
         // Declare the buttons
@@ -48,12 +48,18 @@ namespace TimeTracking
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Create a new instance of the ClockDisplay class
-            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
+            // Create a new instance of the Label class
+            Label _clockLabel = new Label();
 
             // Set the text of the label control to the current time
-            _currentTimeLabel.Text = _clockDisplay.GetTime();
+            _clockDisplay.Text = DateTime.Now.ToString("HH:mm:ss");
+            _clockDisplay.AutoSize = true;
+            _clockDisplay.Font = new Font("Arial", 36, FontStyle.Bold);
+
+            // Add the label control to the form's Controls collection
+            Controls.Add(_clockDisplay);
         }
+
 
         private void CreateAndStartClockTimer()
         {
@@ -88,7 +94,6 @@ namespace TimeTracking
             this.ClientSize = new Size(400, 300);
 
             // Initialize the clock and activity timers
-            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
             _clockTimer = new System.Windows.Forms.Timer();
             _researchTimer = new System.Windows.Forms.Timer();
             _teachingTimer = new System.Windows.Forms.Timer();
@@ -101,9 +106,11 @@ namespace TimeTracking
             _researchTimer.Tick += researchTimer_Tick;
             _teachingTimer.Tick += teachingTimer_Tick;
             _lunchTimer.Tick += lunchTimer_Tick;
-            _researchClockDisplay = new ClockDisplay(0, 0, 0, true);
-            _teachingClockDisplay = new ClockDisplay(0, 0, 0, true);
-            _lunchClockDisplay = new ClockDisplay(0, 0, 0, true);
+            _clockDisplay = new Label();
+            _researchClockDisplay = new Label();
+            _teachingClockDisplay = new Label();
+            _lunchClockDisplay = new Label();
+
 
             // Set the location of the labels
             _currentTimeLabel.Location = new Point(this.ClientSize.Width / 2 - _currentTimeLabel.Width / 2, 25);
@@ -143,12 +150,12 @@ namespace TimeTracking
             _lunchCounter = 0;
 
             // Set the labels of the ClockDisplay objects
-            _researchLabel = _researchClockDisplay?.Label;
-            _teachingLabel = _teachingClockDisplay?.Label;
-            _lunchLabel = _lunchClockDisplay?.Label;
+            _researchLabel = new Label();
+            _teachingLabel = new Label();
+            _lunchLabel = new Label();
 
             // Set the text of the current time label
-            _currentTimeLabel.Text = _clockDisplay.GetTime();
+            _currentTimeLabel.Text = _clockDisplay.Label.Text;
 
             // Initialize the labels
             _researchLabel = new Label();
@@ -159,6 +166,9 @@ namespace TimeTracking
 
             // Initialize the clock display
             _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
+
+            // Update the label text with the current time
+            myLabel.Text = _clockDisplay.GetTime();
 
             // Set the label control for the clock display
             _clockDisplay.Label = _currentTimeLabel;
