@@ -75,6 +75,12 @@ namespace TimeTracking
         {
             InitializeComponent();
 
+            // Set the form title
+            this.Text = "Time Tracking Application";
+
+            // Set the form size
+            this.ClientSize = new Size(400, 300);
+
             // Initialize the clock and activity timers
             _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
             _clockTimer = new System.Windows.Forms.Timer();
@@ -92,6 +98,51 @@ namespace TimeTracking
             _researchClockDisplay = new ClockDisplay(0, 0, 0, true);
             _teachingClockDisplay = new ClockDisplay(0, 0, 0, true);
             _lunchClockDisplay = new ClockDisplay(0, 0, 0, true);
+
+            // Set the location of the labels
+            _currentTimeLabel.Location = new Point(this.ClientSize.Width / 2 - _currentTimeLabel.Width / 2, 25);
+            _researchLabel.Location = new Point(25, 75);
+            _teachingLabel.Location = new Point(25, 100);
+            _lunchLabel.Location = new Point(25, 125);
+            _goHomeLabel.Location = new Point(this.ClientSize.Width / 2 - _goHomeLabel.Width / 2, 200);
+            _messageLabel.Location = new Point(this.ClientSize.Width / 2 - _messageLabel.Width / 2, 250);
+
+            // Set the location and text of the buttons
+            _lunchButton.Location = new Point(25, 75);
+            _lunchButton.Text = "Lunch";
+            _teachingButton.Location = new Point(25, 100);
+            _teachingButton.Text = "Undervisning";
+            _researchButton.Location = new Point(25, 125);
+            _researchButton.Text = "Forskning";
+            _saveButton.Location = new Point(25, 150);
+            _saveButton.Text = "Spara";
+
+            // Set the location and text of the checkbox
+            _showSecondsCheckBox.Location = new Point(25, 175);
+            _showSecondsCheckBox.Text = "Visa sekunder";
+
+            // Set the location of the diod label
+            _goHomeLabel.Location = new Point(this.ClientSize.Width / 2 - _goHomeLabel.Width / 2, 200);
+
+            // Set the font and alignment of the message label
+            _messageLabel.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold);
+            _messageLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+            // Set the visibility of the message label
+            _messageLabel.Visible = false;
+
+            // Set the initial values of the counters
+            _researchCounter = 0;
+            _teachingCounter = 0;
+            _lunchCounter = 0;
+
+            // Set the labels of the ClockDisplay objects
+            _researchLabel = _researchClockDisplay?.Label;
+            _teachingLabel = _teachingClockDisplay?.Label;
+            _lunchLabel = _lunchClockDisplay?.Label;
+
+            // Set the text of the current time label
+            _currentTimeLabel.Text = _clockDisplay.GetTime();
 
             // Initialize the labels
             _researchLabel = new Label();
@@ -123,11 +174,44 @@ namespace TimeTracking
             _lunchButton = new Button();
             _saveButton = new Button();
 
-            // Initialize the checkbox
+            // Create a new CheckBox control
             _showSecondsCheckBox = new CheckBox();
 
-            // Initialize the message label
+            // Set the location and size of the CheckBox control
+            _showSecondsCheckBox.Location = new System.Drawing.Point(25, 125);
+            _showSecondsCheckBox.Size = new System.Drawing.Size(150, 25);
+
+            // Set the text of the CheckBox control
+            _showSecondsCheckBox.Text = "Visa sekunder";
+
+            // Add the CheckedChanged event handler for the CheckBox control
+            _showSecondsCheckBox.CheckedChanged += ShowSecondsCheckBox_CheckedChanged;
+
+            // Add the CheckBox control to the form
+            Controls.Add(_showSecondsCheckBox);
+
+            // Create a new Label control
             _messageLabel = new Label();
+
+            // Set the location and size of the Label control
+            _messageLabel.Location = new System.Drawing.Point(25, 175);
+            _messageLabel.Size = new System.Drawing.Size(250, 25);
+
+            // Set the text of the Label control
+            _messageLabel.Text = "Total tid för forskning och undervisning överstiger 8 timmar!";
+
+            // Set the Font property of the Label control
+            _messageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+
+            // Set the ForeColor property of the Label control
+            _messageLabel.ForeColor = System.Drawing.Color.Red;
+
+            // Set the Visible property of the Label control to false
+            _messageLabel.Visible = false;
+
+            // Add the Label control to the form
+            Controls.Add(_messageLabel);
+
 
             // Set the initial values of the counters
             _researchCounter = 0;
@@ -227,6 +311,12 @@ namespace TimeTracking
                 writer.WriteLine();
             }
         }
+
+        private void GoHomeLabel_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Time to go home!", "Go Home", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
 
         // Handle the ShowSecondsCheckBox CheckedChanged event
         private void ShowSecondsCheckBox_CheckedChanged(object sender, EventArgs e)
