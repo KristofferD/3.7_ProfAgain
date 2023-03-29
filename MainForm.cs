@@ -40,12 +40,43 @@ namespace TimeTracking
         private int _teachingCounter;
         private int _lunchCounter;
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // Create a new instance of the ClockDisplay class
+            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
+
+            // Set the text of the label control to the current time
+            currentTimeLabel.Text = _clockDisplay.GetTime();
+        }
+
+        private void CreateAndStartClockTimer()
+        {
+            // Create a timer to update the current time every second
+            System.Windows.Forms.Timer clockTimer = new System.Windows.Forms.Timer();
+            clockTimer.Interval = 1000;
+            clockTimer.Tick += ClockTimer_Tick;
+
+            // Start the timer
+            clockTimer.Start();
+        }
+        private void ClockTimer_Tick(object sender, EventArgs e)
+        {
+            // Update the current time label with the current time
+            _currentTimeLabel.Text = GetTimeString(DateTime.Now);
+        }
+
+        private string GetTimeString(DateTime time)
+        {
+            // Get the current time as a string in the format HH:mm:ss
+            return time.ToString("HH:mm:ss");
+        }
+
         public MainForm()
         {
             InitializeComponent();
 
             // Initialize the clock and activity timers
-            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, false);
+            _clockDisplay = new ClockDisplay(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, true);
             _clockTimer = new System.Windows.Forms.Timer();
             _researchTimer = new System.Windows.Forms.Timer();
             _teachingTimer = new System.Windows.Forms.Timer();
@@ -58,6 +89,9 @@ namespace TimeTracking
             _researchTimer.Tick += researchTimer_Tick;
             _teachingTimer.Tick += teachingTimer_Tick;
             _lunchTimer.Tick += lunchTimer_Tick;
+            _researchClockDisplay = new ClockDisplay(0, 0, 0, true);
+            _teachingClockDisplay = new ClockDisplay(0, 0, 0, true);
+            _lunchClockDisplay = new ClockDisplay(0, 0, 0, true);
 
             // Initialize the labels
             _researchLabel = new Label();
@@ -77,6 +111,11 @@ namespace TimeTracking
 
             // Set the text of the message label
             _goHomeLabel.Text = "Åk HEM!!!";
+
+            // Set the labels for the activity displays
+            _researchClockDisplay.Label = _researchLabel;
+            _teachingClockDisplay.Label = _teachingLabel;
+            _lunchClockDisplay.Label = _lunchLabel;
 
             // Initialize the buttons
             _researchButton = new Button();
